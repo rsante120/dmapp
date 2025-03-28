@@ -88,6 +88,8 @@ $_nav_modulo = $_navegacion["wnav"]["modulos"][$_REQUEST["mdl"]];
                               <?php
                               foreach ($_nscc["enlaces"] as $ekey => $_nenl) {
                                 $_hr_nenl = "javascript:jscarga('".$_nenl["enl_link"]."','');";
+
+                                $_hr_nenl = construirNuevaURL($_nenl["enl_link"],"");
                                 ?>
                                 <li class="nav-item">
                                   <a class="nav-link" href="<?php echo $_hr_nenl; ?>" data-bs-toggle="" aria-expanded="false">
