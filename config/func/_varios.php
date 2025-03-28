@@ -41,6 +41,7 @@ function es_inyeccion_sql($input) {
   return false;
 }
 function _validar_param($param){
+  $param = str_replace("'","`",$param);
   if (es_inyeccion_sql($param)) {
       die("No se procesará la petición por temas de seguridad");
   }
@@ -177,4 +178,101 @@ function validar_rut($rut) {
   }
 
 }
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function jsfunc_para_cookies_formulario($formuNombre){
+  ?>
+  <script>
+    function cookieFormGuardarDatosEnCookie() {
+      const campos = document.querySelectorAll('.campos');
+      const datos = {};
+
+      campos.forEach(campo => {
+        const tag = campo.tagName.toLowerCase();
+
+        if (campo.type === "checkbox") {
+          datos[campo.id] = campo.checked;
+        } else if (tag === "textarea" || tag === "input" || tag === "select") {
+          datos[campo.id] = campo.value.trim(); // puedes quitar el trim() si no lo deseas
+        }
+      });
+
+      const datosJSON = JSON.stringify(datos);
+      document.cookie = "<?=$formuNombre?>DatosFormulario=" + encodeURIComponent(datosJSON) + "; path=/; max-age=" + (60 * 60 * 24); // 1 día
+
+      //console.clear();
+      //console.log("Datos guardados en cookie:");
+      //console.log(datos);
+    }
+
+    function cookieFormCargarDatosDesdeCookie() {
+      const cookies = document.cookie.split(';');
+      let datos = {};
+
+      cookies.forEach(cookie => {
+        const [nombre, valor] = cookie.trim().split('=');
+        if (nombre === '<?=$formuNombre?>DatosFormulario') {
+          try {
+            datos = JSON.parse(decodeURIComponent(valor));
+          } catch (e) {
+            //console.warn("Error al parsear la cookie <?=$formuNombre?>DatosFormulario:", e);
+          }
+        }
+      });
+
+      Object.keys(datos).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (el.type === "checkbox") {
+            el.checked = datos[id];
+          } else {
+            el.value = datos[id];
+          }
+        }
+      });
+
+      if (Object.keys(datos).length > 0) {
+        //console.log("Datos cargados desde cookie:");
+        //console.log(datos);
+      }
+    }
+
+    function cookieFormInicializarAutoGuardadoCampos() {
+      const campos = document.querySelectorAll('.campos');
+      if (!campos.length) return;
+
+      cookieFormCargarDatosDesdeCookie();
+
+      campos.forEach(campo => {
+        campo.removeEventListener('change', cookieFormGuardarDatosEnCookie);
+        campo.removeEventListener('input', cookieFormGuardarDatosEnCookie);
+
+        campo.addEventListener('change', cookieFormGuardarDatosEnCookie);
+        campo.addEventListener('input', cookieFormGuardarDatosEnCookie);
+      });
+
+      //console.log("Auto-guardado de campos inicializado.");
+    }
+    function cookieFormlimpiarDatosGuardados() {
+      document.cookie = "<?=$formuNombre?>DatosFormulario=; path=/; max-age=0";
+      //console.log("Cookie '<?=$formuNombre?>DatosFormulario' eliminada.");
+    }
+    cookieFormInicializarAutoGuardadoCampos();
+  </script>
+
+
+  <?php
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ?>

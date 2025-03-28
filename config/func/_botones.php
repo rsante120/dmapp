@@ -20,8 +20,8 @@ function _boton($icono, $titulo, $jsfunc, $ar_style = array()){
     ?>
 
     <a  id="<? echo $id_boton_unico; ?>" 
-        href="#" 
-        onclick="js_bloquear_boton('<? echo $id_boton_unico; ?>');<?php echo $jsfunc; ?>" 
+        href="javascript:<?php echo $jsfunc; ?>;" 
+        onclick="js_bloquear_boton('<? echo $id_boton_unico; ?>');" 
         class="btn btn-phoenix-secondary me-1 mb-1 icon btn_sistema <?=$color;?> <?=$css_popup;?>"<?php
         if($popup <> ""){
             ?> data-bs-toggle="tooltip" data-bs-placement="bottom" title="<? echo $popup; ?>" <?php

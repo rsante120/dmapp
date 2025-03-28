@@ -1,4 +1,11 @@
 <?php
+/*
+session_start();
+session_unset();
+unset($_SESSION);
+$_SESSION = array();
+exit;
+*/
 // Iniciar sesión solo si no está iniciada (evita sesiones múltiples)
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -34,5 +41,14 @@ require_once("func/_tiempo.php");
 require_once("func/_varios.php");
 require_once("func/_botones.php");
 require_once("func/_desarrollo.php");
+
+$sql = "SELECT * FROM configuracion";
+$res = mysql_query($sql);
+
+if(mysql_num_rows($res) > 0){
+	while($row = mysql_fetch_assoc($res)){
+		$_SESSION[$app_crpt_zet][$row["cfg_codigo"]] = $row["cfg_valor"];
+	}
+}
 
 ?>

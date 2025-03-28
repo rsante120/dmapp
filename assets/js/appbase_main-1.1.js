@@ -1,6 +1,6 @@
 
 function AJAXPOST(Pagina, Variables, Obj, MsjLoad, FuncionListo, FuncionCarga, Conexion){
-	if(MsjLoad != null){
+	if(MsjLoad != null && MsjLoad != ""){
 		MsjLoad = procesar_mjs(MsjLoad);
 		$(Obj).html(MsjLoad);
 	}
@@ -55,28 +55,18 @@ function procesar_mjs(strMsj){
 	let alignCSS = "center"; // alineación por defecto
 	let mensaje = strMsj;
 
-	// Si el mensaje es exactamente "R", "L" o "C"
-	if (strMsj === "R" || strMsj === "L" || strMsj === "C") {
-			if (strMsj === "R") alignCSS = "right";
-			else if (strMsj === "C") alignCSS = "center";
-			else alignCSS = "left";
-
-			mensaje = "Espere un momento...";
-	}
-
-	// Si comienza con R; L; o C;
-	else if (/^[RLC];/.test(strMsj)) {
+	if (/^[RLC];/.test(strMsj)) {
 			let partes = strMsj.split(";");
 			let alineacion = partes[0];
-			mensaje = partes[1] ? partes[1].trim() : '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>';
 
-			if (alineacion === "R") alignCSS = "right";
-			else if (alineacion === "C") alignCSS = "center";
-			else alignCSS = "left";
-	}
+			if(partes[1].trim() === "loading"){
+				mensaje = '<div class="spinner-border" role="status"><span class="visually-hidden">Cargando...</span></div>';
+			}		
 
-	// Caso por defecto (sin formato válido)
-	else {
+			if (alineacion === "R"){alignCSS = "right";}
+			if (alineacion === "C"){alignCSS = "center";}
+			if (alineacion === "L"){alignCSS = "left";}
+	}else{
 			alignCSS = "left";
 			mensaje = strMsj;
 	}

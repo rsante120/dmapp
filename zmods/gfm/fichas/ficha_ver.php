@@ -119,6 +119,6 @@ if($r_fic["fic_folio"] == 0){
   function ver_atenciones(){
     var dv = document.getElementById("dv_atenciones");
     var a = $(".campos").serialize(); 
-    AJAXPOST(url_base+"zmods/gfm/fichas/atencion_lst_datos.php",a,dv,"L;");
+    AJAXPOST(url_base+"zmods/gfm/atencion_gine/ate_lista_datos.php",a,dv,"L;");
   }
 </script>
